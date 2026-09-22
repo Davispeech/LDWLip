@@ -1,0 +1,9 @@
+
+
+vsr train --root_dir E:/Sproject/DaviLip/LDWLip --weights run_exp/export/MPC_LDW_cer8.0.pth max_epochs=25 --lr 0.0001
+
+vsr test --root_dir E:/Sproject/DaviLip/LDWLip --weights run_exp/Lipv1_note/model_last.pth
+
+python ldw_main.py vsr train --root_dir E:/Sproject/DaviLip/LDWLip --weights run_exp/export/MPC_LDW_cer8.0.pth max_epochs=25 --lr 0.0001
+python ldw_main.py vsr test --root_dir E:/Sproject/DaviLip/LDWLip --weights run_exp/Lipv1_note/model_last.pth
+
