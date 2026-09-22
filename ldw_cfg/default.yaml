@@ -1,0 +1,60 @@
+# LDWLip license
+# Default training settings and hyperparameters for Lipreading
+
+task: vsr # (str) lipreading task, i.e. vsr, asr, avsr, vts, stv
+mode: train # (str) YOLO mode, i.e. train, val, predict, export, track, benchmark
+model: # (str, optional) path to model file, i.e. lipv1.pt, lipv1.yaml
+data: cmlr.yaml # (str, optional) path to data file, i.e. cmlr.yaml
+root_dir: E:/Sproject/DaviLip/LDWLip #/home/ldw/Project/Lipreading/CSLip/
+modality: # audio, video, audio_video
+weights: # run_exp/preweights/CMLR_V_WER8.0/model.pth
+
+# Train settings -------------------------------------------------------------------------------------------------------
+Train:
+  model_name: # LipModel
+  run_exp_dir: run_exp #
+  max_epochs: 75 # (int) number of epochs to train for
+  #time: # (float, optional) number of hours to train for, overrides epochs if supplied
+  batch: 16 # (int) number of images per batch (-1 for AutoBatch)
+  save_every_epoch: 5 # Save checkpoint by every 5 epochs
+#  save_top_k: 5 # Save checkpoint by last 5 epochs
+  save_dir: run_exp # (str, optional) experiment name, results saved to 'project/name' directory
+  device: [0] # (int | str | list, optional) device to run on, i.e. cuda device=0 or device=0,1,2,3 or device=cpu
+  pretrained: True # (bool | str) whether to use a pretrained model (bool) or a model to load weights from (str)
+  freeze:  # (int | list, optional) freeze first n layers, or freeze list of layer indices during training
+  aux_weights: #
+  optimizer: auto # (str) optimizer to use, choices=[SGD, Adam, Adamax, AdamW, NAdam, RAdam, RMSProp, auto]
+  lr: 1e-3 #1e-3
+  lr_min: 0.00005
+  warmup_epochs: 2 # 5
+  weight_decay: 0.03
+
+  workers: 8 # (int) number of worker threads for data loading (per RANK if DDP)
+  resume: False # (bool) resume training from last checkpoint
+  precision: 32
+  num_nodes: 1
+  sync_batchnorm: True
+  num_sanity_val_steps: 0
+  accumulate_grad_batches: 1
+  gradient_clip_val: 5.0
+  replace_sampler_ddp: False
+
+  multi_scale: False # (bool) Whether to use multiscale during training
+
+# Val/Test settings ----------------------------------------------------------------------------------------------------
+Eval:
+  outfile: #
+  save_per_sample: False #False
+  half: False # (bool) use half precision (FP16)
+
+# Predict settings -----------------------------------------------------------------------------------------------------
+Predict:
+  source: # (str, optional) source directory for images or videos
+  detect: retinaface #
+
+
+# - reWeights task --------------------------------------------------------------------------------------
+layer_depth: #
+export_name: exportModel #
+export_layers: #
+

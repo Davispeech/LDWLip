@@ -1,0 +1,37 @@
+# LDW lipreading license
+# LDW lipreading model. For Usage examples see https://github/???
+
+Input:
+  - [-1, 1, input, Input_video, []]
+  - [-1, 1, aux_input, Input_audio, []] #
+Encoder:
+  # [from, repeats, type, module, args]   # type: unit, block, module, network
+  - [0, 1, encoder, Conv3D_2DNet, ['ResNet18']]
+  - [-1, 1, encoder, embed, [256, 0.1, "rel_mha"]]
+  - [-1, 12, encoder, ConformerLayer, [256, 4, 2048, 0.1, "rel_mha"]]
+  - [-1, 1, encoder, LayerNorm, [256]]  # 5
+  # Aux ASR
+  - [ 1, 1, aux_encoder, Conv_1DNet, [ 'ResNet18' ] ]
+  - [ -1, 1, aux_encoder, embed, [ 256, 0.1, "rel_mha" ] ]
+  - [ -1, 12, aux_encoder, ConformerLayer, [ 256, 4, 2048, 0.1, "rel_mha" ] ]
+  - [ -1, 1, aux_encoder, LayerNorm, [ 256 ] ]  # 9
+Decoder:
+  - [-5, 1, decoder_, CTCDecoder, [3363, 256, 0.1, "builtin", True]]  # 10
+  - [-6, 1, decoder_, ATTDecoder, [3363, 256, 4, 2048, 6, 0.1]]
+Loss:
+  - [-2, 1, loss, loss_ctc, [3363, 256, 0.1, "builtin", True] ]
+  - [-2, 1, loss, loss_att, [3363, -1, 0.1, False] ]
+  - [[9, 5], 1, aux_loss, loss_L1, []]
+  - [[-1, -2, -3], 1, loss_total, loss_total, [1, 0.9, 0.1]]
+
+Output:
+  name: HybrideLipOutput
+  output_param:
+    lm_model: False
+    rnnlm: run_exp/preweights/language_models/CMLR/lm_zh/model.pth
+    rnnlm_conf: run_exp/preweights/language_models/CMLR/lm_zh/model.json
+    beam_size: 20
+    penalty: 0.3
+    ctc_weight: 0.1
+    lm_weight: 0.3
+

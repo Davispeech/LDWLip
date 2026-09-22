@@ -1,0 +1,30 @@
+# LDW lipreading license
+# LDW lipreading model. For Usage examples see https://github/???
+
+
+Input:
+  - [-1, 1, input, Input_audio_mel, []]
+Encoder:
+  # [from, repeats, type, module, args]   # type: unit, block, module, network
+  - [-1, 1, encoder, AudioEncoder, [80, 1500, 384, 6, 4]]
+Decoder:
+  - [-1, 1, decoder_, TextDecoder, [51865, 448, 384, 6, 4]]
+Loss:
+  - [-1, 1, loss, loss_CrossEntropy, [] ]
+Output:
+  name: whisperDecoder
+  output_param:
+    is_multilingual: True
+    num_languages: 99
+    n_mels: 80
+    n_audio_ctx: 1500
+    n_audio_state: 384
+    n_audio_head: 6
+    n_audio_layer: 4
+    n_vocab: 51865
+    n_text_ctx: 448
+    n_text_state: 384
+    n_text_head: 6
+    n_text_layer: 4
+
+

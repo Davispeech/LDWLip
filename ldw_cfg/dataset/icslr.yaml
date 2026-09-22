@@ -1,0 +1,12 @@
+data_path: F:/Datasets/lipreading/
+char_path: dictionary/zh-cn/icslr.txt
+train: labels/icslr/icslr_train.csv
+val: labels/icslr/icslr_val_112.csv
+test: labels/icslr/icslr_test.csv
+data_utils:
+  rate_ratio: 640
+  max_frames: 1200 #1800
+  max_frames_val: 500 #500
+  dataset_type: avdataset
+  batch_size: 64
+
