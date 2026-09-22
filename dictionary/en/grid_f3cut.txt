@@ -1,0 +1,15 @@
+<blank>
+<unk>
+bin
+lay
+place
+set
+blue
+green
+red
+white
+at
+by
+in
+with
+<eos>
