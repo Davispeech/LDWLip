@@ -1,0 +1,13 @@
+data_path: data/
+char_path: dictionary/zh-cn/cvsrbili.txt
+train: labels/cvsrbili/cvsrbili_unseen_train.csv  # cvsrbili_unseen_train
+val: labels/cvsrbili/cvsrbili_unseen_val.csv
+test: labels/cvsrbili/cvsrbili_unseen_test.csv
+
+data_utils:
+  rate_ratio: 640
+  audio_ratio: 44100
+  max_frames: 1200 #1800
+  max_frames_val: 1200 #500
+  stage_frame_threshold: 250
+

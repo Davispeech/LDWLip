@@ -1,0 +1,21 @@
+# Example usage: python main.py train data=cmlr.yaml
+# root_dir
+# ├── labels
+# ├    └── cmlr
+# └── data
+#     └── cmlr  ← downloads here (1 MB)
+
+data_path: data/
+char_path: dictionary/zh-cn/cmlr.txt
+train: labels/cmlr/cmlr_unseen_train.csv  # cmlr_unseen_train
+val: labels/cmlr/cmlr_unseen_test.csv  # cmlr_unseen_test112
+test: labels/cmlr/cmlr_unseen_test.csv # cmlr_unseen_test
+
+data_utils:
+  rate_ratio: 640
+  audio_ratio: 16000
+  max_frames: 1200 #1800
+  max_frames_val: 1200 #500
+  stage_frame_threshold: 250
+
+

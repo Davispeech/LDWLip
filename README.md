@@ -148,6 +148,83 @@ labels/cvsrbili/cvsrbili_unseen_test.csv
 Unseen speaker 测试集由 8 名未出现在训练集中的说话人组成：
 `b001`、`b017`、`b029`、`b032`、`b037`、`b040`、`b042` 和 `b052`。
 
+## （3）Speaker adaptation 训练与评估
+
+以下命令以 CVSRBILI 的 `b001` 说话人、1 分钟适应集为例。将
+`weights` 替换为已经训练好的基础模型权重。
+
+### 1. V-LoRA + speaker identity loss
+
+该配置使用视觉卷积 LoRA（V-LoRA），不启用 LoRA-MoE：
+
+```bash
+python ldw_main.py vsr train ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_VEid_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=AdaptVSR3LoRA_VEidCE_b001_1_cvsrbili ^
+  train_data=labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv ^
+  val_data=labels/cvsrbili/cvsrbili_unseen_val.csv ^
+  max_epochs=7 ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  warmup_epochs=0 ^
+  lr=0.01 ^
+  save_every_epoch=1 ^
+  lora=True
+```
+
+评估第 6 个 epoch 的适配权重：
+
+```bash
+python ldw_main.py vsr eval ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_VEid_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=AdaptVSR3LoRA_VEidCE_b001_1_ep6_cvsrbili ^
+  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  lora_weights=output/train--AdaptVSR3LoRA_VEidCE_b001_1_cvsrbili/model_6.pth ^
+  lora=True
+```
+
+### 2. LoRA-MoE（本文方法，w/o augmentation）
+
+该配置在 V-LoRA 基础上加入 `LoRAMoEPaper`。训练 6 个 epoch，
+第 5 个 epoch 的权重用于最终评估：
+
+```bash
+python ldw_main.py vsr train ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=AdaptVSR3LoRA_NoAug_b001_1_cvsrbili ^
+  train_data=labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv ^
+  val_data=labels/cvsrbili/cvsrbili_unseen_val.csv ^
+  max_epochs=6 ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  warmup_epochs=0 ^
+  lr=0.01 ^
+  save_every_epoch=5 ^
+  lora=True
+```
+
+```bash
+python ldw_main.py vsr eval ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=AdaptVSR3LoRA_NoAug_b001_1_cvsrbili ^
+  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  lora_weights=output/train--AdaptVSR3LoRA_NoAug_b001_1_cvsrbili/model_5.pth ^
+  lora=True
+```
+
+将 `b001` 替换为其他 unseen speaker（`b017`、`b029`、`b032`、
+`b037`、`b040`、`b042`、`b052`），将 `1` 替换为 `3` 或 `5`，
+即可运行对应的 3/5 分钟适应实验。批量运行也可以使用
+`run_vlora_noaug_bili.bat` 或 `run_vlora_idce_cmlrbili.bat`。
+
 ### 3. CNCVS 数据集
 
 数据来源：网络爬取。
@@ -186,7 +263,7 @@ icslr_test_person.csv
 
 
 
-## （3）训练、评估和预测识别
+## （4）训练、评估和预测识别
 
 ### 1. 基本训练
 
