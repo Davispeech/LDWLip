@@ -112,7 +112,43 @@ extraSet.csv
 - `cmlr_train_person.csv` 包含 11 人；
 - `extraSet.csv` 包含 5 人。
 
-### 2. CNCVS 数据集
+### 2. CVSRBILI 数据集
+
+`cvsrbili` 是本项目整理的中文唇读数据集，标签文件位于
+`labels/cvsrbili/`。
+
+#### 常规训练与评估
+
+```text
+labels/cvsrbili/cvsrbili_train.csv
+labels/cvsrbili/cvsrbili_val.csv
+labels/cvsrbili/cvsrbili_test.csv
+```
+
+常规划分包含 57 名说话人：
+
+- 训练集：213,051 条记录；
+- 验证集：30,454 条记录；
+- 测试集：60,869 条记录。
+
+#### Unseen speaker 训练与测试
+
+Unseen speaker 划分按说话人隔离，训练、验证和测试说话人互不重叠：
+
+```text
+labels/cvsrbili/cvsrbili_unseen_train.csv
+labels/cvsrbili/cvsrbili_unseen_val.csv
+labels/cvsrbili/cvsrbili_unseen_test.csv
+```
+
+- `cvsrbili_unseen_train.csv`：41 名说话人，229,196 条记录；
+- `cvsrbili_unseen_val.csv`：8 名说话人，40,909 条记录；
+- `cvsrbili_unseen_test.csv`：8 名说话人，17,381 条记录。
+
+Unseen speaker 测试集由 8 名未出现在训练集中的说话人组成：
+`b001`、`b017`、`b029`、`b032`、`b037`、`b040`、`b042` 和 `b052`。
+
+### 3. CNCVS 数据集
 
 数据来源：网络爬取。
 
@@ -124,7 +160,7 @@ cncvs_test.csv
 cncvs_val.csv
 ```
 
-### 3. ICSLR 数据集
+### 4. ICSLR 数据集
 
 数据来源：实验室录制。
 
