@@ -119,7 +119,7 @@ labels/icslr/icslr_test.csv
 
 CSV 标签下载：[ICSLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)。
 
-ICSLR 数据集论文及获取参考：[Variable Structure and Modeling Units for Chinese Lipreading](https://doi.org/10.1142/S0218001422560213)；公开数据下载链接：`to be continue`。
+ICSLR 数据集论文及获取参考：[Variable Structure and Modeling Units for Chinese Lipreading](https://doi.org/10.1142/S0218001422560213)。
 
 ## 3. 快速启动
 
