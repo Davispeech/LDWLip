@@ -69,6 +69,19 @@ labels/cmlr/cmlr_unseen_test.csv
 
 数据配置：[cmlr.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr.yaml)、[cmlr_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr_unseen.yaml)。
 
+适应集目录：
+
+```text
+labels/cmlr/cmlr_unseen_adapt_s2_1.csv
+labels/cmlr/cmlr_unseen_adapt_s2_3.csv
+labels/cmlr/cmlr_unseen_adapt_s2_5.csv
+labels/cmlr/cmlr_unseen_adapt_s6_1.csv
+labels/cmlr/cmlr_unseen_adapt_s6_3.csv
+labels/cmlr/cmlr_unseen_adapt_s6_5.csv
+```
+
+CSV 下载链接：[CMLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)；原始视频下载链接：`to be continue`。
+
 ### 2.2 CVSRBILI
 
 CVSRBILI 是本项目使用的中文唇读数据集。标签目录：[labels/cvsrbili](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)。
@@ -99,6 +112,37 @@ labels/cvsrbili/cvsrbili_unseen_adapt_<speaker>_<minutes>.csv
 
 例如：`cvsrbili_unseen_adapt_b001_1.csv`。数据配置：[cvsrbili_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cvsrbili_unseen.yaml)。
 
+适应集目录：
+
+```text
+labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b001_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b001_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b017_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b017_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b017_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b029_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b029_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b029_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b032_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b032_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b032_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b037_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b037_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b037_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b040_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b040_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b040_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b042_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b042_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b042_5.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b052_1.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b052_3.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_b052_5.csv
+```
+
+CSV 下载链接：[CVSRBILI 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)；原始视频下载链接：`to be continue`。
+
 ### 2.3 ICSLR
 
 ICSLR 来源于实验室录制数据。标签目录：[labels/icslr](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)。
@@ -108,6 +152,8 @@ labels/icslr/icslr_train.csv
 labels/icslr/icslr_val_112.csv
 labels/icslr/icslr_test.csv
 ```
+
+CSV 下载链接：[ICSLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)；原始视频下载链接：`to be continue`。
 
 ## 3. 快速启动
 
@@ -132,6 +178,22 @@ python ldw_main.py vsr predict data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. we
 ```
 
 ## 4. 训练、评估与预测识别
+
+命令中的参数说明：
+
+- `vsr` / `lipauth`：任务类型，分别对应视觉语音识别和唇部身份识别。
+- `train` / `eval` / `predict`：训练、评估和指定视频预测子命令。
+- `data`：数据集 YAML 配置路径，例如 `cmlr.yaml` 或 `cvsrbili_unseen.yaml`。
+- `model`：模型 YAML 配置路径，例如 `Lipv1_aux.yaml`。
+- `root_dir`：项目根目录；从项目根目录执行时使用 `.`。
+- `model_name`：本次实验名称，决定输出目录名。
+- `weights`：基础模型权重路径；训练时作为初始化权重，评估/预测时作为基础模型权重。
+- `max_epochs`：最大训练轮数。
+- `save_every_epoch`：每隔多少轮保存一次模型。
+- `test_data`：评估时使用的 CSV 标签文件。
+- `source`：预测时输入的视频文件路径。
+- `lora_weights`：speaker adaptation 训练得到的 LoRA 权重路径。
+- `lora=True`：启用 LoRA 权重注入；普通全量训练时可以删除该参数。
 
 ### 4.1 VSR（Overlap）
 
@@ -176,6 +238,49 @@ python ldw_main.py vsr eval data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_
 ```bash
 python ldw_main.py vsr predict data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. weights=output/train--vsr_unseen_cvsrbili/model_last.pth source=path/to/video.mp4
 ```
+
+#### Speaker adaptation（V-LoRA / LoRA-MoE）
+
+以 `b001` 的 1 分钟适应集为例。`train_data` 指向适应集，
+`val_data` 用于训练过程中的验证；`lora_weights` 是训练生成的适配器权重。
+
+```bash
+python ldw_main.py vsr train ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=adapt_b001_1 ^
+  train_data=labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv ^
+  val_data=labels/cvsrbili/cvsrbili_unseen_val.csv ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  max_epochs=6 ^
+  save_every_epoch=5 ^
+  lora=True
+```
+
+```bash
+python ldw_main.py vsr eval ^
+  data=cvsrbili_unseen.yaml ^
+  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
+  root_dir=. ^
+  model_name=adapt_b001_1 ^
+  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
+  weights=path/to/cvsrbili_backbone.pth ^
+  lora_weights=output/train--adapt_b001_1/model_5.pth ^
+  lora=True
+```
+
+其中：
+
+- `train_data`：speaker adaptation 使用的 1/3/5 分钟适应集；
+- `val_data`：训练过程验证集，不等同于最终测试集；
+- `model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml`：V-LoRA 与
+  `LoRAMoEPaper` 的组合配置；
+- `lora_weights`：适应训练后保存的 LoRA/MoE 权重；
+- `model_5.pth`：上述 6 轮训练中第 5 轮保存的权重。
+
+将 `b001` 替换为其他 unseen speaker，将 `1` 替换为 `3` 或 `5`，
+即可运行其他适应实验。
 
 ### 4.3 LipAuth
 
