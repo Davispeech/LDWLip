@@ -1,71 +1,41 @@
-# 1.3 快速启动
+# LDWLip
 
-## （1）环境配置
+## 1. 环境配置
 
-### 1. 下载项目
-
-项目文件：
-
-`LDWLip.tar.gz`（414.40 MB）
-
-### 2. 创建 Conda 环境
+### 1.1 下载项目
 
 ```bash
-conda create -y -n DWLip python=3.9
-conda activate DWLip
+git clone https://github.com/Davispeech/LDWLip.git
+cd LDWLip
 ```
 
-### 3. 安装 PyTorch
+也可以直接下载：[GitHub ZIP](https://github.com/Davispeech/LDWLip/archive/refs/heads/main.zip)。
 
-根据实际运行环境选择对应版本。
-
-#### PyTorch 2.0.1 + CUDA 11.7
+### 1.2 创建 Conda 环境
 
 ```bash
-conda install pytorch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 pytorch-cuda=11.7 -c pytorch -c nvidia
+conda create -y -n LDWLip3 python=3.9
+conda activate LDWLip3
 ```
 
-#### PyTorch 2.1.0 + CUDA 11.8
+### 1.3 安装 PyTorch 和依赖
+
+根据 CUDA 版本选择 PyTorch。以下为 CUDA 11.8 示例：
 
 ```bash
 conda install pytorch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 pytorch-cuda=11.8 -c pytorch -c nvidia
-```
-
-### 4. 安装依赖库
-
-```bash
 pip install sentencepiece av six opencv-python scikit-image tqdm thop tensorboard pyyaml tiktoken chardet decord soundfile einops tensorboardX matplotlib scikit-learn pypinyin
-pip install timm openai-whisper
-pip install "numpy<2" --force-reinstall
-pip install transformers==4.30.0
-pip install accelerate pandas loralib
-```
-
-### 5. 安装 fairseq
-
-注意：最新版 `pip` 与 `fairseq` 可能存在兼容性问题。建议将 `pip` 降级至 24.0 后再安装 `fairseq`。
-
-```bash
-python.exe -m pip install pip==24.0
+pip install timm openai-whisper transformers==4.30.0 accelerate pandas loralib
+pip install "numpy<2"
+python -m pip install pip==24.0
 pip install fairseq
-```
-
-### 6. 安装 mmcv
-
-```bash
 python -m pip install openmim
 python -m mim install mmcv-full
 ```
 
-### 7. 安装预处理模型
+### 1.4 预处理模型
 
-预处理模型用于人脸检测与人脸对齐，不影响模型训练和评估。
-
-相关工具参考：
-
-https://github.com/hhj1897/
-
-#### 人脸检测
+人脸检测和对齐工具参考：[face_detection](https://github.com/hhj1897/face_detection)。
 
 ```bash
 git clone https://github.com/hhj1897/face_detection.git
@@ -74,50 +44,36 @@ git lfs pull
 pip install -e .
 ```
 
-#### 人脸对齐
+## 2. 数据集准备
 
-```bash
-git clone https://github.com/hhj1897/face_detection.git
-cd face_detection
-git lfs pull
-pip install -e .
-```
+GitHub 中提供的是 CSV 标签文件；视频数据需要根据 CSV 中的路径自行准备，并在数据配置中设置 `data_path`。
 
-> 注意：`git lfs pull` 可以不执行。
+### 2.1 CMLR
 
-## （2）数据准备
+CMLR 来源于《新闻联播》视频。标签目录：[labels/cmlr](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)。
 
-### 1. CMLR 数据集
-
-数据来源：爬取《新闻联播》。
-
-#### 常规训练与评估
+常规划分：
 
 ```text
-cmlr_train.csv
-cmlr_test.csv
-cmlr_val.csv
+labels/cmlr/cmlr_train.csv
+labels/cmlr/cmlr_val.csv
+labels/cmlr/cmlr_test.csv
 ```
 
-
-#### Unseen 训练与评估
+Unseen speaker 划分：
 
 ```text
-cmlr_train_person.csv
-extraSet.csv
+labels/cmlr/cmlr_unseen_train.csv
+labels/cmlr/cmlr_unseen_test.csv
 ```
 
-其中：
+数据配置：[cmlr.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr.yaml)、[cmlr_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr_unseen.yaml)。
 
-- `cmlr_train_person.csv` 包含 11 人；
-- `extraSet.csv` 包含 5 人。
+### 2.2 CVSRBILI
 
-### 2. CVSRBILI 数据集
+CVSRBILI 是本项目使用的中文唇读数据集。标签目录：[labels/cvsrbili](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)。
 
-`cvsrbili` 是本项目整理的中文唇读数据集，标签文件位于
-`labels/cvsrbili/`。
-
-#### 常规训练与评估
+常规划分包含 57 名说话人：
 
 ```text
 labels/cvsrbili/cvsrbili_train.csv
@@ -125,15 +81,7 @@ labels/cvsrbili/cvsrbili_val.csv
 labels/cvsrbili/cvsrbili_test.csv
 ```
 
-常规划分包含 57 名说话人：
-
-- 训练集：213,051 条记录；
-- 验证集：30,454 条记录；
-- 测试集：60,869 条记录。
-
-#### Unseen speaker 训练与测试
-
-Unseen speaker 划分按说话人隔离，训练、验证和测试说话人互不重叠：
+Unseen speaker 划分：
 
 ```text
 labels/cvsrbili/cvsrbili_unseen_train.csv
@@ -141,175 +89,114 @@ labels/cvsrbili/cvsrbili_unseen_val.csv
 labels/cvsrbili/cvsrbili_unseen_test.csv
 ```
 
-- `cvsrbili_unseen_train.csv`：41 名说话人，229,196 条记录；
-- `cvsrbili_unseen_val.csv`：8 名说话人，40,909 条记录；
-- `cvsrbili_unseen_test.csv`：8 名说话人，17,381 条记录。
+其中训练集包含 41 名说话人，验证集和测试集各包含 8 名未见说话人。测试说话人为 `b001`、`b017`、`b029`、`b032`、`b037`、`b040`、`b042` 和 `b052`。
 
-Unseen speaker 测试集由 8 名未出现在训练集中的说话人组成：
-`b001`、`b017`、`b029`、`b032`、`b037`、`b040`、`b042` 和 `b052`。
-
-## （3）Speaker adaptation 训练与评估
-
-以下命令以 CVSRBILI 的 `b001` 说话人、1 分钟适应集为例。将
-`weights` 替换为已经训练好的基础模型权重。
-
-### 1. V-LoRA + speaker identity loss
-
-该配置使用视觉卷积 LoRA（V-LoRA），不启用 LoRA-MoE：
-
-```bash
-python ldw_main.py vsr train ^
-  data=cvsrbili_unseen.yaml ^
-  model=PhD003/AdaptVSR3LoRA_VEid_cvsrbili.yaml ^
-  root_dir=. ^
-  model_name=AdaptVSR3LoRA_VEidCE_b001_1_cvsrbili ^
-  train_data=labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv ^
-  val_data=labels/cvsrbili/cvsrbili_unseen_val.csv ^
-  max_epochs=7 ^
-  weights=path/to/cvsrbili_backbone.pth ^
-  warmup_epochs=0 ^
-  lr=0.01 ^
-  save_every_epoch=1 ^
-  lora=True
-```
-
-评估第 6 个 epoch 的适配权重：
-
-```bash
-python ldw_main.py vsr eval ^
-  data=cvsrbili_unseen.yaml ^
-  model=PhD003/AdaptVSR3LoRA_VEid_cvsrbili.yaml ^
-  root_dir=. ^
-  model_name=AdaptVSR3LoRA_VEidCE_b001_1_ep6_cvsrbili ^
-  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
-  weights=path/to/cvsrbili_backbone.pth ^
-  lora_weights=output/train--AdaptVSR3LoRA_VEidCE_b001_1_cvsrbili/model_6.pth ^
-  lora=True
-```
-
-### 2. LoRA-MoE（本文方法，w/o augmentation）
-
-该配置在 V-LoRA 基础上加入 `LoRAMoEPaper`。训练 6 个 epoch，
-第 5 个 epoch 的权重用于最终评估：
-
-```bash
-python ldw_main.py vsr train ^
-  data=cvsrbili_unseen.yaml ^
-  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
-  root_dir=. ^
-  model_name=AdaptVSR3LoRA_NoAug_b001_1_cvsrbili ^
-  train_data=labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv ^
-  val_data=labels/cvsrbili/cvsrbili_unseen_val.csv ^
-  max_epochs=6 ^
-  weights=path/to/cvsrbili_backbone.pth ^
-  warmup_epochs=0 ^
-  lr=0.01 ^
-  save_every_epoch=5 ^
-  lora=True
-```
-
-```bash
-python ldw_main.py vsr eval ^
-  data=cvsrbili_unseen.yaml ^
-  model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
-  root_dir=. ^
-  model_name=AdaptVSR3LoRA_NoAug_b001_1_cvsrbili ^
-  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
-  weights=path/to/cvsrbili_backbone.pth ^
-  lora_weights=output/train--AdaptVSR3LoRA_NoAug_b001_1_cvsrbili/model_5.pth ^
-  lora=True
-```
-
-将 `b001` 替换为其他 unseen speaker（`b017`、`b029`、`b032`、
-`b037`、`b040`、`b042`、`b052`），将 `1` 替换为 `3` 或 `5`，
-即可运行对应的 3/5 分钟适应实验。批量运行也可以使用
-`run_vlora_noaug_bili.bat` 或 `run_vlora_idce_cmlrbili.bat`。
-
-### 3. CNCVS 数据集
-
-数据来源：网络爬取。
-
-#### 常规训练与评估
+1/3/5 分钟 speaker adaptation 标签：
 
 ```text
-cncvs_train.csv
-cncvs_test.csv
-cncvs_val.csv
+labels/cvsrbili/cvsrbili_unseen_adapt_<speaker>_<minutes>.csv
 ```
 
-### 4. ICSLR 数据集
+例如：`cvsrbili_unseen_adapt_b001_1.csv`。数据配置：[cvsrbili_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cvsrbili_unseen.yaml)。
 
-数据来源：实验室录制。
+### 2.3 ICSLR
 
-#### 常规训练与评估
+ICSLR 来源于实验室录制数据。标签目录：[labels/icslr](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)。
 
 ```text
-icslr_train.csv
-icslr_test.csv
+labels/icslr/icslr_train.csv
+labels/icslr/icslr_val_112.csv
+labels/icslr/icslr_test.csv
 ```
 
-#### Unseen 训练与评估
+## 3. 快速启动
 
-```text
-icslr_train_person.csv
-icslr_test_person.csv
-```
+以下命令使用仓库根目录作为 `root_dir`，并假设基础模型权重位于 `path/to/model.pth`。
 
-其中：
-
-- `icslr_train_person.csv` 包含 25 人；
-- `icslr_test_person.csv` 包含 2 人。
-
-
-
-
-## （4）训练、评估和预测识别
-
-### 1. 基本训练
+### 3.1 基本训练
 
 ```bash
-python main.py vsr train data=cmlr.yaml model=Lipv1.yaml weights= run_exp/debug/model_last.pth epochs=75
+python ldw_main.py vsr train data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=baseline_cmlr weights=path/to/model.pth max_epochs=75
 ```
 
-### 2. 模型评估
-
-评估模型，并将结果保存至：
-
-`output/Lipv1_cer8.0/`
+### 3.2 模型评估
 
 ```bash
-python main.py vsr eval data=cmlr.yaml model=Lipv1.yaml weights= run_exp/debug/model_last.pth model_name=Lipv1_cer8.0
+python ldw_main.py vsr eval data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=baseline_cmlr test_data=labels/cmlr/cmlr_test.csv weights=path/to/model.pth
 ```
 
-### 3. 指定视频预测
-
-使用训练好的模型对指定视频进行预测：
+### 3.3 指定视频预测
 
 ```bash
-python main.py vsr predict data=cmlr.yaml model=Lipv1.yaml weights= run_exp/debug/model_last.pth source=./data/ldw.mp4
+python ldw_main.py vsr predict data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. weights=path/to/model.pth source=path/to/video.mp4
 ```
 
-# 1.4 验证环境配置是否成功
+## 4. 训练、评估与预测识别
 
-## 1. 训练
+### 4.1 VSR（Overlap）
 
-### VSR 模型训练
+Overlap 使用同一说话人集合中的常规训练、验证和测试划分。
+
+训练：
 
 ```bash
-python ldw_main.py vsr train data=icslrAuth.yaml model=Pro_001_Displays/VSR/LipTMP_VSR_icslr.yaml root_dir=E:/Sproject/DaviLip/LDWLip weights=run_exp/export/Encoder_lrw_snv05x_tcn1x.pth model_name=LipTMP_VSR_icslr_pre max_epochs=5 save_every_epoch=1
+python ldw_main.py vsr train data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_overlap_cmlr weights=path/to/model.pth max_epochs=75
 ```
 
-### LipAuth 模型训练
+评估：
 
 ```bash
-python ldw_main.py lipauth train data=icslrAuth.yaml model=Pro_001_Displays/icslr/Static_ResNet18_icslr.yaml root_dir=E:/Sproject/DaviLip/LDWLip model_name=Static_ResNet18_icslr max_epochs=20 save_every_epoch=1
+python ldw_main.py vsr eval data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_overlap_cmlr test_data=labels/cmlr/cmlr_test.csv weights=output/train--vsr_overlap_cmlr/model_last.pth
 ```
 
-## 2. 评估
-
-### VSR 模型评估
+预测：
 
 ```bash
-python ldw_main.py vsr eval data=icslrAuth.yaml model=Pro_001_Displays/VSR/LipTMP_VSR_icslr.yaml root_dir=E:/Sproject/DaviLip/LDWLip weights=run_exp/LipTMP_VSR_icslr_pre/model_last.pth
+python ldw_main.py vsr predict data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. weights=output/train--vsr_overlap_cmlr/model_last.pth source=path/to/video.mp4
 ```
 
+### 4.2 VSR（Unseen）
+
+Unseen 使用按说话人隔离的划分。以下以 CVSRBILI 为例。
+
+训练：
+
+```bash
+python ldw_main.py vsr train data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_unseen_cvsrbili weights=path/to/model.pth max_epochs=75
+```
+
+评估：
+
+```bash
+python ldw_main.py vsr eval data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_unseen_cvsrbili test_data=labels/cvsrbili/cvsrbili_unseen_test.csv weights=output/train--vsr_unseen_cvsrbili/model_last.pth
+```
+
+预测：
+
+```bash
+python ldw_main.py vsr predict data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. weights=output/train--vsr_unseen_cvsrbili/model_last.pth source=path/to/video.mp4
+```
+
+### 4.3 LipAuth
+
+LipAuth 使用 `lipauth` 任务入口。仓库当前未包含特定实验的 LipAuth 模型 YAML，请将下面的 `path/to/lipauth_model.yaml` 替换为实际配置文件，并将数据配置替换为对应的 LipAuth 数据配置。
+
+训练：
+
+```bash
+python ldw_main.py lipauth train data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. model_name=lipauth_baseline max_epochs=20 save_every_epoch=1
+```
+
+评估：
+
+```bash
+python ldw_main.py lipauth eval data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. model_name=lipauth_baseline weights=output/train--lipauth_baseline/model_last.pth
+```
+
+预测/识别：
+
+```bash
+python ldw_main.py lipauth predict data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. weights=output/train--lipauth_baseline/model_last.pth source=path/to/video.mp4
+```
+
+V-LoRA 和 LoRA-MoE 的 speaker adaptation 配置位于 [`ldw_cfg/model/PhD003`](https://github.com/Davispeech/LDWLip/tree/main/ldw_cfg/model/PhD003)，核心实现位于 [`ldw_nets/lora`](https://github.com/Davispeech/LDWLip/tree/main/ldw_nets/lora)。
