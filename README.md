@@ -179,21 +179,25 @@ python ldw_main.py vsr predict data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. we
 
 ## 4. 训练、评估与预测识别
 
-命令中的参数说明：
+以下命令使用 Windows CMD 的 `^` 进行换行。每个参数单独列出，执行前请替换占位路径。
+
+### 4.0 参数说明
 
 - `vsr` / `lipauth`：任务类型，分别对应视觉语音识别和唇部身份识别。
 - `train` / `eval` / `predict`：训练、评估和指定视频预测子命令。
-- `data`：数据集 YAML 配置路径，例如 `cmlr.yaml` 或 `cvsrbili_unseen.yaml`。
-- `model`：模型 YAML 配置路径，例如 `Lipv1_aux.yaml`。
-- `root_dir`：项目根目录；从项目根目录执行时使用 `.`。
-- `model_name`：本次实验名称，决定输出目录名。
-- `weights`：基础模型权重路径；训练时作为初始化权重，评估/预测时作为基础模型权重。
+- `data`：数据集 YAML 配置路径。
+- `model`：模型 YAML 配置路径。
+- `root_dir`：项目根目录，从项目根目录执行时使用 `.`。
+- `model_name`：实验名称，决定输出目录名。
+- `train_data`：speaker adaptation 使用的适应集 CSV。
+- `val_data`：训练过程中的验证集 CSV。
+- `test_data`：评估时使用的测试集 CSV。
+- `weights`：基础模型权重路径。
+- `lora_weights`：speaker adaptation 训练生成的 LoRA 权重路径。
 - `max_epochs`：最大训练轮数。
 - `save_every_epoch`：每隔多少轮保存一次模型。
-- `test_data`：评估时使用的 CSV 标签文件。
+- `lora=True`：启用 LoRA 权重注入。
 - `source`：预测时输入的视频文件路径。
-- `lora_weights`：speaker adaptation 训练得到的 LoRA 权重路径。
-- `lora=True`：启用 LoRA 权重注入；普通全量训练时可以删除该参数。
 
 ### 4.1 VSR（Overlap）
 
@@ -201,20 +205,37 @@ Overlap 使用同一说话人集合中的常规训练、验证和测试划分。
 
 训练：
 
-```bash
-python ldw_main.py vsr train data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_overlap_cmlr weights=path/to/model.pth max_epochs=75
+```bat
+python ldw_main.py vsr train ^
+  data=cmlr.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  model_name=vsr_overlap_cmlr ^
+  weights=path/to/model.pth ^
+  max_epochs=75
 ```
 
 评估：
 
-```bash
-python ldw_main.py vsr eval data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_overlap_cmlr test_data=labels/cmlr/cmlr_test.csv weights=output/train--vsr_overlap_cmlr/model_last.pth
+```bat
+python ldw_main.py vsr eval ^
+  data=cmlr.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  model_name=vsr_overlap_cmlr ^
+  test_data=labels/cmlr/cmlr_test.csv ^
+  weights=output/train--vsr_overlap_cmlr/model_last.pth
 ```
 
-预测：
+指定视频预测：
 
-```bash
-python ldw_main.py vsr predict data=cmlr.yaml model=Lipv1_aux.yaml root_dir=. weights=output/train--vsr_overlap_cmlr/model_last.pth source=path/to/video.mp4
+```bat
+python ldw_main.py vsr predict ^
+  data=cmlr.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  weights=output/train--vsr_overlap_cmlr/model_last.pth ^
+  source=path/to/video.mp4
 ```
 
 ### 4.2 VSR（Unseen）
@@ -223,28 +244,44 @@ Unseen 使用按说话人隔离的划分。以下以 CVSRBILI 为例。
 
 训练：
 
-```bash
-python ldw_main.py vsr train data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_unseen_cvsrbili weights=path/to/model.pth max_epochs=75
+```bat
+python ldw_main.py vsr train ^
+  data=cvsrbili_unseen.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  model_name=vsr_unseen_cvsrbili ^
+  weights=path/to/model.pth ^
+  max_epochs=75
 ```
 
 评估：
 
-```bash
-python ldw_main.py vsr eval data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. model_name=vsr_unseen_cvsrbili test_data=labels/cvsrbili/cvsrbili_unseen_test.csv weights=output/train--vsr_unseen_cvsrbili/model_last.pth
+```bat
+python ldw_main.py vsr eval ^
+  data=cvsrbili_unseen.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  model_name=vsr_unseen_cvsrbili ^
+  test_data=labels/cvsrbili/cvsrbili_unseen_test.csv ^
+  weights=output/train--vsr_unseen_cvsrbili/model_last.pth
 ```
 
-预测：
+指定视频预测：
 
-```bash
-python ldw_main.py vsr predict data=cvsrbili_unseen.yaml model=Lipv1_aux.yaml root_dir=. weights=output/train--vsr_unseen_cvsrbili/model_last.pth source=path/to/video.mp4
+```bat
+python ldw_main.py vsr predict ^
+  data=cvsrbili_unseen.yaml ^
+  model=Lipv1_aux.yaml ^
+  root_dir=. ^
+  weights=output/train--vsr_unseen_cvsrbili/model_last.pth ^
+  source=path/to/video.mp4
 ```
 
 #### Speaker adaptation（V-LoRA / LoRA-MoE）
 
-以 `b001` 的 1 分钟适应集为例。`train_data` 指向适应集，
-`val_data` 用于训练过程中的验证；`lora_weights` 是训练生成的适配器权重。
+以 `b001` 的 1 分钟适应集为例：
 
-```bash
+```bat
 python ldw_main.py vsr train ^
   data=cvsrbili_unseen.yaml ^
   model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
@@ -258,7 +295,9 @@ python ldw_main.py vsr train ^
   lora=True
 ```
 
-```bash
+评估适配权重：
+
+```bat
 python ldw_main.py vsr eval ^
   data=cvsrbili_unseen.yaml ^
   model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml ^
@@ -270,38 +309,44 @@ python ldw_main.py vsr eval ^
   lora=True
 ```
 
-其中：
-
-- `train_data`：speaker adaptation 使用的 1/3/5 分钟适应集；
-- `val_data`：训练过程验证集，不等同于最终测试集；
-- `model=PhD003/AdaptVSR3LoRA_NoAug_cvsrbili.yaml`：V-LoRA 与
-  `LoRAMoEPaper` 的组合配置；
-- `lora_weights`：适应训练后保存的 LoRA/MoE 权重；
-- `model_5.pth`：上述 6 轮训练中第 5 轮保存的权重。
-
-将 `b001` 替换为其他 unseen speaker，将 `1` 替换为 `3` 或 `5`，
-即可运行其他适应实验。
+将 `b001` 替换为其他 unseen speaker，将 `1` 替换为 `3` 或 `5`，即可运行其他适应实验。
 
 ### 4.3 LipAuth
 
-LipAuth 使用 `lipauth` 任务入口。仓库当前未包含特定实验的 LipAuth 模型 YAML，请将下面的 `path/to/lipauth_model.yaml` 替换为实际配置文件，并将数据配置替换为对应的 LipAuth 数据配置。
+LipAuth 使用 `lipauth` 任务入口。仓库当前未包含特定实验的 LipAuth 模型 YAML，请将 `path/to/lipauth_*.yaml` 替换为实际配置文件。
 
 训练：
 
-```bash
-python ldw_main.py lipauth train data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. model_name=lipauth_baseline max_epochs=20 save_every_epoch=1
+```bat
+python ldw_main.py lipauth train ^
+  data=path/to/lipauth_data.yaml ^
+  model=path/to/lipauth_model.yaml ^
+  root_dir=. ^
+  model_name=lipauth_baseline ^
+  max_epochs=20 ^
+  save_every_epoch=1
 ```
 
 评估：
 
-```bash
-python ldw_main.py lipauth eval data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. model_name=lipauth_baseline weights=output/train--lipauth_baseline/model_last.pth
+```bat
+python ldw_main.py lipauth eval ^
+  data=path/to/lipauth_data.yaml ^
+  model=path/to/lipauth_model.yaml ^
+  root_dir=. ^
+  model_name=lipauth_baseline ^
+  weights=output/train--lipauth_baseline/model_last.pth
 ```
 
 预测/识别：
 
-```bash
-python ldw_main.py lipauth predict data=path/to/lipauth_data.yaml model=path/to/lipauth_model.yaml root_dir=. weights=output/train--lipauth_baseline/model_last.pth source=path/to/video.mp4
+```bat
+python ldw_main.py lipauth predict ^
+  data=path/to/lipauth_data.yaml ^
+  model=path/to/lipauth_model.yaml ^
+  root_dir=. ^
+  weights=output/train--lipauth_baseline/model_last.pth ^
+  source=path/to/video.mp4
 ```
 
 V-LoRA 和 LoRA-MoE 的 speaker adaptation 配置位于 [`ldw_cfg/model/PhD003`](https://github.com/Davispeech/LDWLip/tree/main/ldw_cfg/model/PhD003)，核心实现位于 [`ldw_nets/lora`](https://github.com/Davispeech/LDWLip/tree/main/ldw_nets/lora)。
