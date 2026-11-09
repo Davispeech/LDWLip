@@ -1,0 +1,34 @@
+# LDW lipreading license
+# LDW lipreading model. For Usage examples see https://github/???
+
+
+# LDWLipv1 Encoder
+Input:
+  - [-1, 1, input, Input_video, []] #
+Encoder:
+  - [-1, 1, encoder, Conv3D_2DNet, ['ResNet18']]
+  - [-1, 1, encoder, embed, [256, 0.1, "rel_mha"]]
+  - [-1, 12, encoder, ConformerLayer, [256, 4, 2048, 0.1, "rel_mha"]]
+  - [-1, 1, encoder, LayerNorm, [256]]
+Decoder:
+  - [-1, 1, decoder_, CTCDecoder, [4165, 256, 0.1, "builtin", True]]
+  - [-2, 1, decoder_, ATTDecoder, [4165, 256, 4, 2048, 6, 0.1]]
+Loss:
+  - [-2, 1, loss, loss_Focal_ctc, [4165, 256, 0.1, "builtin", True, True, 0.5, True] ]
+  - [-2, 1, loss, loss_Focal_att, [4165, -1, 0.1, False, 1.5, True] ]
+  - [[-1, -2], 1, loss_total, loss_total, [0.9, 0.1]]
+LoRA:
+  - [3, LoRALinear, [2, 4], ["self_attn"]]
+Output:
+  name: HybrideLipOutput
+  output_param:
+    lm_model: False
+    rnnlm: run_exp/preweights/language_models/CMLR/lm_zh/model.pth
+    rnnlm_conf: run_exp/preweights/language_models/CMLR/lm_zh/model.json
+    beam_size: 20
+    penalty: 0.3
+    ctc_weight: 0.1
+    lm_weight: 0.3
+
+
+

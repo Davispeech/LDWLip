@@ -1,0 +1,18 @@
+name: lora
+args:
+  frontend:
+#    ResNet trunk每个BasicBlock中的conv2
+    rank: 16
+    alpha: 64
+    position_regs: ['model.*.layer.*.conv']
+  backend:
+#conformer中注意力层的Q,K,V
+    rank: 32
+    alpha: 64
+    position_regs: ["model.\\d+\\.\\d+.self_attn.linear_q",
+                    "model.\\d+\\.\\d+.self_attn.linear_k",
+                    "model.\\d+\\.\\d+.self_attn.linear_v"]
+  decoder:
+    rank: 16
+    alpha: 64
+    position_regs: [ 'decoder.*.linear_q','decoder.*.linear_k','decoder.*.linear_v']
