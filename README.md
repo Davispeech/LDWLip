@@ -69,16 +69,6 @@ labels/cmlr/cmlr_unseen_test.csv
 
 数据配置：[cmlr.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr.yaml)、[cmlr_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr_unseen.yaml)。
 
-适应集目录：
-
-```text
-labels/cmlr/cmlr_unseen_adapt_s2_1.csv
-labels/cmlr/cmlr_unseen_adapt_s2_3.csv
-labels/cmlr/cmlr_unseen_adapt_s2_5.csv
-labels/cmlr/cmlr_unseen_adapt_s6_1.csv
-labels/cmlr/cmlr_unseen_adapt_s6_3.csv
-labels/cmlr/cmlr_unseen_adapt_s6_5.csv
-```
 
 CSV 标签下载：[CMLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)。
 
@@ -114,34 +104,6 @@ labels/cvsrbili/cvsrbili_unseen_adapt_<speaker>_<minutes>.csv
 
 例如：`cvsrbili_unseen_adapt_b001_1.csv`。数据配置：[cvsrbili_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cvsrbili_unseen.yaml)。
 
-适应集目录：
-
-```text
-labels/cvsrbili/cvsrbili_unseen_adapt_b001_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b001_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b001_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b017_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b017_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b017_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b029_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b029_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b029_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b032_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b032_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b032_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b037_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b037_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b037_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b040_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b040_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b040_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b042_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b042_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b042_5.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b052_1.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b052_3.csv
-labels/cvsrbili/cvsrbili_unseen_adapt_b052_5.csv
-```
 
 CSV 下载链接：[CVSRBILI 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)；原始视频下载链接：`to be continue`。
 
