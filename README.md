@@ -80,7 +80,9 @@ labels/cmlr/cmlr_unseen_adapt_s6_3.csv
 labels/cmlr/cmlr_unseen_adapt_s6_5.csv
 ```
 
-CSV 下载链接：[CMLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)；原始视频下载链接：`to be continue`。
+CSV 标签下载：[CMLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)。
+
+CMLR 官方数据主页：[https://vipazoo.cn/CMLR.html](https://vipazoo.cn/CMLR.html)；直接下载链接：[http://t.cn/A6waiog1](http://t.cn/A6waiog1)；提取码：`emqx`。该数据集仅限高校和科研机构用于研究。
 
 ### 2.2 CVSRBILI
 
@@ -153,7 +155,9 @@ labels/icslr/icslr_val_112.csv
 labels/icslr/icslr_test.csv
 ```
 
-CSV 下载链接：[ICSLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)；原始视频下载链接：`to be continue`。
+CSV 标签下载：[ICSLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/icslr)。
+
+ICSLR 数据集论文及获取参考：[Variable Structure and Modeling Units for Chinese Lipreading](https://doi.org/10.1142/S0218001422560213)；公开数据下载链接：`to be continue`。
 
 ## 3. 快速启动
 
