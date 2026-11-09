@@ -69,7 +69,6 @@ labels/cmlr/cmlr_unseen_test.csv
 
 数据配置：[cmlr.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr.yaml)、[cmlr_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cmlr_unseen.yaml)。
 
-
 CSV 标签下载：[CMLR 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cmlr)。
 
 CMLR 官方数据主页：[https://vipazoo.cn/CMLR.html](https://vipazoo.cn/CMLR.html)；直接下载链接：[http://t.cn/A6waiog1](http://t.cn/A6waiog1)；提取码：`emqx`。该数据集仅限高校和科研机构用于研究。
@@ -104,8 +103,7 @@ labels/cvsrbili/cvsrbili_unseen_adapt_<speaker>_<minutes>.csv
 
 例如：`cvsrbili_unseen_adapt_b001_1.csv`。数据配置：[cvsrbili_unseen.yaml](https://github.com/Davispeech/LDWLip/blob/main/ldw_cfg/dataset/cvsrbili_unseen.yaml)。
 
-
-CSV 下载链接：[CVSRBILI 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)；原始视频下载链接：`to be continue`。
+CSV 下载链接：[CVSRBILI 标签目录](https://github.com/Davispeech/LDWLip/tree/main/labels/cvsrbili)；原始视频下载链接：[百度网盘](https://pan.baidu.com/s/1_aXb7OE166TB9q1EprYHMg?pwd=8keb)，提取码：`8keb`。
 
 ### 2.3 ICSLR
 
